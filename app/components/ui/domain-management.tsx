@@ -6,6 +6,8 @@ import { DomainFilters } from './components/domain-filters';
 import { DomainTable } from './components/domain-table';
 import DomainManipulator from './components/domain-manipulator';
 import useDataStore from '@/app/stores/dataStore';
+import useSettingStore from '@/app/stores/settingsStore';
+import LanguageDropdown from './components/language-dropdown';
 
 const initialFilters = {
     search: '',
@@ -14,8 +16,8 @@ const initialFilters = {
 }
 
 export const DomainManagement: React.FC = () => {
-    const { domains, loading, error, deleteDomain, fetchDomains } = useDataStore();
-
+    const { dict, domains, loading, error, deleteDomain, fetchDomains } = useDataStore();
+    const { isRTL } = useSettingStore() 
     const [isManupulating, setIsManupulating] = useState<{isActive: boolean, purpose: "add" | "edit", domain?: Domain}>({isActive: false, purpose: "add"})
 
     const [filteredDomains, setFilteredDomains] = useState<Domain[]>(domains);
@@ -103,9 +105,12 @@ export const DomainManagement: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Domains</h1>
-        <p className="mt-1 text-sm text-gray-500">CRUD + Search & Filter</p>
+      <div className={`mb-8 ${isRTL ? "text-end flex-row-reverse" : ""} flex items-center justify-between`}>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">{dict.domains}</h1>
+          <p className="mt-1 text-sm text-gray-500">CRUD + Search & Filter</p>
+        </div>
+        <LanguageDropdown />
       </div>
 
       <DomainFilters

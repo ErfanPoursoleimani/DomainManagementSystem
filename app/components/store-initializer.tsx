@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react';
 import { useDataStore } from '../stores/dataStore';
+import { useSettingStore } from '../stores/settingsStore';
 import { Lang } from '../types/dictionary';
 
 interface DataInitializerProps {
@@ -15,9 +16,8 @@ export const StoreInitializer: React.FC<DataInitializerProps> = ({
 
     const hasInitializedRef = useRef(false);
     
-    // Data store selectors
-    const initializeStore = useDataStore((state) => state.initializeStore);
-    const dataLoading = useDataStore((state) => state.loading);
+    const initializeSettingStore = useSettingStore((state) => state.initializeStore);
+    const initializeDataStore = useDataStore((state) => state.initializeStore);
     const dataReset = useDataStore((state) => state.reset);
 
     const [hasHydrated, setHasHydrated] = useState(false);
@@ -38,8 +38,8 @@ export const StoreInitializer: React.FC<DataInitializerProps> = ({
         if (shouldInitialize) {
             const init = async () => {
                 try {
-                    // Initialize/reinitialize the store
-                    await initializeStore(lang);
+                    await initializeSettingStore(lang);
+                    await initializeDataStore(lang);
                     
                     // Update ref state after successful initialization
                     hasInitializedRef.current = true;
@@ -54,7 +54,8 @@ export const StoreInitializer: React.FC<DataInitializerProps> = ({
             init();
         }
     }, [
-        initializeStore,
+        initializeDataStore,
+        initializeSettingStore,
         dataReset,
         lang
     ]);
@@ -75,3 +76,7 @@ export const StoreInitializer: React.FC<DataInitializerProps> = ({
 
     return <>{children}</>;
 };
+
+function useSettingsStore(arg0: (state: any) => any) {
+    throw new Error('Function not implemented.');
+}

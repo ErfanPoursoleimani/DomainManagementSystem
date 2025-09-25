@@ -4,9 +4,6 @@ import { Dict, Lang } from '../types/dictionary';
 import axios from 'axios';
 import { Domain } from '../types/domain';
 
-// Add these interfaces if they don't exist in your types
-
-
 interface DataStore {
     // State
     domains: Domain[],
@@ -37,7 +34,7 @@ interface DataStore {
 }
 
 const initialDict: Dict = {
-    
+    domains: "Domains"
 };
 
 const initialState = {
@@ -128,8 +125,7 @@ export const useDataStore = create<DataStore>()((set, get) => ({
         }
     },
 
-    // Initialize Store (replaces your useEffect logic)
-    initializeStore: async (lang: Lang) => {
+    initializeStore: async (lang: Lang): Promise<void> => {
         set({ lang });
         
         // Fetch all data in parallel
@@ -149,7 +145,6 @@ export const useDataStore = create<DataStore>()((set, get) => ({
     // Utility Actions
     clearError: () => set({ error: '' }),
 
-    // Reset function - restores all state to initial values (no localStorage clearing)
     reset: () => {
         set(initialState);
     }
